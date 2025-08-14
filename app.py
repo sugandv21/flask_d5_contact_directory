@@ -2,17 +2,18 @@ from flask import Flask
 from config import Config
 from extensions import db
 from routes import main
-from models import Contact
+import os
 
 def create_app():
-    app = Flask(__name__)
+    template_dir = os.path.join(os.path.abspath(os.path.dirname(__file__)), "templates")
+    app = Flask(__name__, template_folder=template_dir)
     app.config.from_object(Config)
 
     db.init_app(app)
     app.register_blueprint(main)
 
     with app.app_context():
-        db.create_all()
+        db.create_all()  # auto-generate .db
 
     return app
 
